@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta Digital 💌</title>
+
+<style>
+body{
+    margin: 0;
+    font-family: 'Georgia', serif;
+    overflow-x: hidden;
+    transition: background 2s ease;
+}
+
+.fondo-romantico{
+    background: linear-gradient(135deg, #ff9ecf, #ffc0cb, #ffd6e8);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    width: 90%;
+    max-width: 350px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+}
+
+.error { color: red; }
+
+#mensajeInicial{
+    display: none;
+    text-align: center;
+    margin-top: 80px;
+    font-size: 28px;
+}
+
+/* Corazones */
+.heart {
+    position: fixed;
+    top: -10px;
+    animation: fall linear forwards;
+    pointer-events: none;
+    z-index: 999;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
+}
+
+/* Carta */
+.carta {
+    display: none;
+    max-width: 90%;
+    margin: 40px auto;
+    background: #fffafc;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+}
+
+.titulo {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Botón regalo */
+.regalo-btn {
+    display: block;
+    margin: 30px auto;
+    background: #ff4d88;
+    color: white;
+    font-size: 20px;
+    padding: 15px 25px;
+    border-radius: 15px;
+    transition: transform 0.3s;
+}
+
+.regalo-btn:hover {
+    transform: scale(1.1);
+}
+
+/* Contenedor boletos */
+.boletos {
+    display: none;
+    margin: 30px auto;
+    max-width: 95%;
+}
+
+/* Ticket animado */
+.ticket {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    margin-bottom: 25px;
+    transform: translateY(100px);
+    opacity: 0;
+    animation: slideUp 1s forwards;
+    position: relative;
+}
+
+/* Efecto perforado lateral */
+.ticket::before, .ticket::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #ffd6e8;
+    border-radius: 50%;
+    left: -15px;
+}
+
+.ticket::before { top: 40px; }
+.ticket::after { bottom: 40px; }
+
+@keyframes slideUp {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Imagen del evento */
+.ticket img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* Info ticket */
+.ticket-content {
+    padding: 20px;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <h3>Ingresa mi cumpleaños dia/mes/año/apodo</h3>
+        <input type="password" id="password" placeholder="Contraseña">
+        <button onclick="validar()">Ingresar</button>
+        <p id="mensaje"></p>
+    </div>
+</div>
+
+<div id="mensajeInicial">
+    💘 Lo lograste 💘 <br>
+    Feliz Día de San Valentín ❤️
+</div>
+
+<div id="carta" class="carta">
+    <div class="titulo">💌 Para Ti 💌</div>
+    <p id="texto"></p>
+    <button class="regalo-btn" onclick="mostrarBoletos()">🎁 Sorpresa</button>
+</div>
+
+<div id="boletos" class="boletos">
+    <div class="ticket">
+        
+        <img src="https://th.bing.com/th/id/OIP.RLWMAxT5eOZZWvOyXajJMgHaEh?w=254&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Evento">
+        <div class="ticket-content">
+            <h3>🎟️ Acceso Especial 🎟️</h3>
+            <p><strong>Evento:</strong> Nuestra Próxima Cita</p>
+            <p><strong>Fecha:</strong> 22/febrero/2026</p>
+            <p><strong>Lugar:</strong> Feria Aztlan 💖</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const contraseñaCorrecta = "18/abril/2002/osito";
+
+function validar(){
+    const pass = document.getElementById("password").value;
+    if(pass === contraseñaCorrecta){
+        document.getElementById("loginModal").style.display = "none";
+        document.getElementById("mensajeInicial").style.display = "block";
+        lluviaCorazones();
+    } else {
+        document.getElementById("mensaje").textContent = "Contraseña incorrecta 💔";
+    }
+}
+
+function lluviaCorazones() {
+    const duracion = 5000;
+
+    const interval = setInterval(() => {
+        let heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (Math.random() * 25 + 35) + "px";
+        heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 120);
+
+    setTimeout(() => {
+        clearInterval(interval);
+        document.body.classList.add("fondo-romantico");
+        document.getElementById("mensajeInicial").style.display = "none";
+        mostrarCarta();
+    }, duracion);
+}
+
+function mostrarCarta(){
+    document.getElementById("carta").style.display = "block";
+    escribirTexto();
+}
+
+function escribirTexto(){
+    const mensaje = `Hoy quiero regalarte algo más que palabras...
+Quiero regalarte momentos.
+
+Presiona el regalo 🎁`;
+
+    let i = 0;
+    const textoElemento = document.getElementById("texto");
+
+    function escribir(){
+        if(i < mensaje.length){
+            textoElemento.innerHTML += mensaje.charAt(i);
+            i++;
+            setTimeout(escribir, 40);
+        }
+    }
+    escribir();
+}
+
+function mostrarBoletos(){
+    document.getElementById("boletos").style.display = "block";
+}
+</script>
+
+</body>
+</html>
