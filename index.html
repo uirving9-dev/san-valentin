@@ -189,7 +189,6 @@ button {
 
 <div id="boletos" class="boletos">
     <div class="ticket">
-        
         <img src="https://th.bing.com/th/id/OIP.RLWMAxT5eOZZWvOyXajJMgHaEh?w=254&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Evento">
         <div class="ticket-content">
             <h3>🎟️ Acceso Especial 🎟️</h3>
@@ -200,15 +199,38 @@ button {
     </div>
 </div>
 
+<!-- 🎵 Música -->
+<audio id="musica" src="musica/amor.mp3" loop></audio>
+
+
 <script>
 const contraseñaCorrecta = "18/abril/2002/osito";
 
 function validar(){
     const pass = document.getElementById("password").value;
+
     if(pass === contraseñaCorrecta){
+
         document.getElementById("loginModal").style.display = "none";
         document.getElementById("mensajeInicial").style.display = "block";
+
+        // 🎵 Música con fade romántico
+        const audio = document.getElementById("musica");
+        audio.volume = 0;
+        audio.play();
+
+        let volumen = 0;
+        const fade = setInterval(() => {
+            if (volumen < 0.5) {
+                volumen += 0.01; // Más suave
+                audio.volume = volumen;
+            } else {
+                clearInterval(fade);
+            }
+        }, 200);
+
         lluviaCorazones();
+
     } else {
         document.getElementById("mensaje").textContent = "Contraseña incorrecta 💔";
     }
@@ -222,7 +244,7 @@ function lluviaCorazones() {
         heart.classList.add("heart");
         heart.innerHTML = "💖";
         heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = (Math.random() * 25 + 35) + "px";
+        heart.style.fontSize = (Math.random() * 30 + 45) + "px";
         heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 5000);
@@ -267,3 +289,5 @@ function mostrarBoletos(){
 
 </body>
 </html>
+
+
